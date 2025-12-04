@@ -7,7 +7,7 @@ def predict(messages, model, tokenizer):
     elif torch.cuda.is_available():
         device = "cuda"
     else:
-        device = "cpu"
+        device = "xpu"
 
     text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     model_inputs = tokenizer([text], return_tensors="pt").to(device)

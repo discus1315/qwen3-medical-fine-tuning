@@ -9,7 +9,7 @@ import swanlab
 
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-medical"
 PROMPT = "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。"
-MAX_LENGTH = 1024
+MAX_LENGTH = 512
 
 swanlab.config.update({
     "model": "Qwen/Qwen3-0.6B",
@@ -68,7 +68,7 @@ def process_func(example):
 
 
 def predict(messages, model, tokenizer):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() else "xpu"
     text = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -101,7 +101,7 @@ config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     inference_mode=False,  # 训练模式
-    r=8,  # Lora 秩
+    r=4,  # Lora 秩
     lora_alpha=32,  # Lora alaph，具体作用参见 Lora 原理
     lora_dropout=0.1,  # Dropout 比例
 )
